@@ -1,0 +1,21 @@
+{
+  "name": "feedback-service",
+  "version": "1.0.0",
+  "description": "Service for nlc",
+  "main": "actions/feedback-service.js",
+  "dependencies": {
+    "watson-developer-cloud": "^3.0.6"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.1",
+    "eslint-config-google": "^0.9.1",
+    "webpack": "^3.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "deploy": "bx wsk action update feedback/feedback-service dist/bundle.js --web true --kind nodejs:8"
+  },
+  "author": "",
+  "license": "ISC"
+}
