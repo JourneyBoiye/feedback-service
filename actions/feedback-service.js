@@ -38,23 +38,44 @@ function main(params) {
       });
       const database = cloudant.db.use(params.dbName);
       if (result.top_class === "PRICEREDUCE") {
-        database.find({selector:{"rpi":{"$lt":params.min_rpi}}}, (er, result) => {
+        database.find(
+          {
+            selector: {
+              "$and": [
+                {
+                  "rpi": {
+                  "$lt": params.min_rpi
+                  }
+                },
+                {
+                  "query": params.activities
+                }
+              ]
+            }
+          }, (er, result) => {
           if (er) {
             reject(er)
           }
-          cloudant.db.destroy(params.dbName, err => {
-            reject(err)
-          })
           resolve(result)
         })
       } else if (result.top_class === "PRICEINCREASE") {
-        database.find({selector:{"rpi":{"$gt":params.max_rpi}}}, (er, result) => {
+        database.find(
+          {
+            selector: {
+              "$and": [
+                { "rpi": {
+                  "$gt":params.max_rpi
+                  }
+                },
+                {
+                  "query": params.activities
+                }
+              ]
+            }
+          }, (er, result) => {
           if (er) {
             reject(er)
           }
-          cloudant.db.destroy(params.dbName, err => {
-            reject(err)
-          })
           resolve(result)
         })
       } else {
