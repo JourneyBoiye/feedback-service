@@ -4,6 +4,7 @@
   "description": "Service for nlc",
   "main": "actions/feedback-service.js",
   "dependencies": {
+    "@cloudant/cloudant": "^2.1.0",
     "watson-developer-cloud": "^3.0.6"
   },
   "devDependencies": {
@@ -14,7 +15,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
-    "deploy": "bx wsk action update feedback/feedback-service dist/bundle.js --web true --kind nodejs:8"
+    "deploy": "bx wsk action update feedback/feedback-service dist/bundle.js --web true --kind nodejs:8",
+    "deployDebug": "bx wsk action update feedback/feedback-service-debug actions/feedback-service.js --web true --kind nodejs:8"
   },
   "author": "",
   "license": "ISC"
