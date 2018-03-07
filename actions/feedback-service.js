@@ -42,19 +42,20 @@ function main(params) {
           {
             selector: {
               "$and": [
-                "rpi": {
+                {
+                  "rpi": {
                   "$lt": params.min_rpi
+                  }
                 },
-                "query": params.activities
+                {
+                  "query": params.activities
+                }
               ]
             }
           }, (er, result) => {
           if (er) {
             reject(er)
           }
-          cloudant.db.destroy(params.dbName, err => {
-            reject(err)
-          })
           resolve(result)
         })
       } else if (result.top_class === "PRICEINCREASE") {
@@ -62,19 +63,19 @@ function main(params) {
           {
             selector: {
               "$and": [
-                "rpi": {
+                { "rpi": {
                   "$gt":params.max_rpi
+                  }
                 },
-                "query": params.activities
+                {
+                  "query": params.activities
+                }
               ]
             }
           }, (er, result) => {
           if (er) {
             reject(er)
           }
-          cloudant.db.destroy(params.dbName, err => {
-            reject(err)
-          })
           resolve(result)
         })
       } else {
