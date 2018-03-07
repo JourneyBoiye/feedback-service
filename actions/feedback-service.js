@@ -42,6 +42,9 @@ function main(params) {
           if (er) {
             reject(er)
           }
+          cloudant.db.destroy(params.dbName, err => {
+            reject(err)
+          })
           resolve(result)
         })
       } else if (result.top_class === "PRICEINCREASE") {
@@ -49,6 +52,9 @@ function main(params) {
           if (er) {
             reject(er)
           }
+          cloudant.db.destroy(params.dbName, err => {
+            reject(err)
+          })
           resolve(result)
         })
       } else {
