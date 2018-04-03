@@ -95,11 +95,21 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
               },
             ],
           },
-        }, (er, result) => {
-        if (er) {
-          reject(er);
-        }
-        resolve(result);
+        }, (er, results) => {
+          if (er) {
+            reject(er);
+          }
+          results.min_rpi = 300;
+          results.max_rpi = 0;
+          results.docs.forEach(result => {
+            if (result.rpi < results.min_rpi) {
+              results.min_rpi = result.rpi;
+            }
+            if (result.rpi > results.max_rpi) {
+              results.max_rpi = result.rpi;
+            }
+          });
+          resolve(results);
       });
     } else if (feedbackClass.top_class === 'PRICEINCREASE') {
       database.find(
@@ -115,11 +125,21 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
               },
             ],
           },
-        }, (er, result) => {
-        if (er) {
-          reject(er);
-        }
-        resolve(result);
+        }, (er, results) => {
+          if (er) {
+            reject(er);
+          }
+          results.min_rpi = 300;
+          results.max_rpi = 0;
+          results.docs.forEach(result => {
+            if (result.rpi < results.min_rpi) {
+              results.min_rpi = result.rpi;
+            }
+            if (result.rpi > results.max_rpi) {
+              results.max_rpi = result.rpi;
+            }
+          });
+          resolve(results);
       });
     }
   });
