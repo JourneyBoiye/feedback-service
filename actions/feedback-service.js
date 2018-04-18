@@ -99,16 +99,22 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
           if (er) {
             reject(er);
           }
-          results.min_rpi = 300;
-          results.max_rpi = 0;
+          results.min_rpi = Infinity;
+          results.max_rpi = -Infinity;
           results.docs.forEach(result => {
-            if (result.rpi < results.min_rpi) {
-              results.min_rpi = result.rpi;
+            if (result.signDiff < results.min_rpi) {
+              results.min_rpi = result.signDiff;
             }
-            if (result.rpi > results.max_rpi) {
-              results.max_rpi = result.rpi;
+            if (result.signDiff > results.max_rpi) {
+              results.max_rpi = result.signDiff;
             }
           });
+
+          results.sort((a, b) => {
+            return a.absDiff - b.absDiff;
+          });
+          results = results.slice(0, 5);
+
           resolve(results);
       });
     } else if (feedbackClass.top_class === 'PRICEINCREASE') {
@@ -116,7 +122,8 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
         {
           selector: {
             '$and': [
-              {'signDiff': {
+              {
+                'signDiff': {
                 '$gt': maxrpi,
                 },
               },
@@ -129,16 +136,22 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
           if (er) {
             reject(er);
           }
-          results.min_rpi = 300;
-          results.max_rpi = 0;
+          results.min_rpi = Infinity;
+          results.max_rpi = -Infinity;
           results.docs.forEach(result => {
-            if (result.rpi < results.min_rpi) {
-              results.min_rpi = result.rpi;
+            if (result.signDiff < results.min_rpi) {
+              results.min_rpi = result.signDiff;
             }
-            if (result.rpi > results.max_rpi) {
-              results.max_rpi = result.rpi;
+            if (result.signDiff > results.max_rpi) {
+              results.max_rpi = result.signDiff;
             }
           });
+
+          results.sort((a, b) => {
+            return a.absDiff - b.absDiff;
+          });
+          results = results.slice(0, 5);
+
           resolve(results);
       });
     }
