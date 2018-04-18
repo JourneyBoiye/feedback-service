@@ -101,7 +101,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
           }
           results.min_rpi = Infinity;
           results.max_rpi = -Infinity;
-          results = results.slice(0, 5);
+          results.docs = results.docs.slice(0, 5);
 
           results.docs.forEach(result => {
             if (result.signDiff < results.min_rpi) {
@@ -112,7 +112,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
             }
           });
 
-          results.sort((a, b) => {
+          results.docs.sort((a, b) => {
             return a.absDiff - b.absDiff;
           });
 
@@ -139,7 +139,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
           }
           results.min_rpi = Infinity;
           results.max_rpi = -Infinity;
-          results = results.slice(0, 5);
+          results.docs = results.docs.slice(0, 5);
 
           results.docs.forEach(result => {
             if (result.signDiff < results.min_rpi) {
@@ -150,7 +150,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
             }
           });
 
-          results.sort((a, b) => {
+          results.docs.sort((a, b) => {
             return a.absDiff - b.absDiff;
           });
 
