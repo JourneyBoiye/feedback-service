@@ -86,7 +86,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
           selector: {
             '$and': [
               {
-                'rpi': {
+                'signDiff': {
                 '$lt': minrpi,
                 },
               },
@@ -116,7 +116,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
         {
           selector: {
             '$and': [
-              {'rpi': {
+              {'signDiff': {
                 '$gt': maxrpi,
                 },
               },
