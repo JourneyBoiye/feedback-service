@@ -15,6 +15,9 @@ function main(params) {
   assert(params.classifier_id, 'params.classifier_id cannot be null');
 
   assert(params.feedback, 'params.feedback cannot be null');
+  assert(params.iataFrom, 'params.iataFrom cannot be null');
+  assert(params.budget, 'params.budget cannot be null');
+  assert(params.days, 'params.days cannot be null')
 
   assert(params.cloudantUsername, 'params.cloudantUsername cannot be null');
   assert(params.cloudantPassword, 'params.cloudantPassword cannot be null');
@@ -36,7 +39,8 @@ function main(params) {
     .then((feedbackClass) => {
     resolve(update(
         feedbackClass, cloudant, params.dbName, params.min_rpi,
-        params.max_rpi, params.activities));
+        params.max_rpi, params.activities, params.iataFrom, params.bugdet,
+        params.days));
     })
   });
 }
@@ -77,7 +81,8 @@ function classify(classifier, feedback, id) {
  * @param {string} activities The search query of the user.
  * @return {Promise} The new results from the Cloudant DB.
  */
-function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
+function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities,
+  iataFrom, budget, days) {
   return new Promise((resolve, reject) => {
     const database = cloudant.db.use(dbName);
     if (feedbackClass.top_class === 'PRICEREDUCE') {
@@ -91,7 +96,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
                 },
               },
               {
-                'query': activities,
+                'query': activities + iataFrom + budget + days,
               },
             ],
           },
@@ -99,6 +104,11 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
           if (er) {
             reject(er);
           }
+
+          results.docs.sort((a, b) => {
+            return a.absDiff - b.absDiff;
+          });
+
           results.min_rpi = Infinity;
           results.max_rpi = -Infinity;
           results.docs = results.docs.slice(0, 5);
@@ -112,9 +122,6 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
             }
           });
 
-          results.docs.sort((a, b) => {
-            return a.absDiff - b.absDiff;
-          });
 
           resolve(results);
       });
@@ -129,7 +136,7 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
                 },
               },
               {
-                'query': activities,
+                'query': activities + iataFrom + budget + days,
               },
             ],
           },
@@ -137,6 +144,10 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
           if (er) {
             reject(er);
           }
+          results.docs.sort((a, b) => {
+            return a.absDiff - b.absDiff;
+          });
+
           results.min_rpi = Infinity;
           results.max_rpi = -Infinity;
           results.docs = results.docs.slice(0, 5);
@@ -148,10 +159,6 @@ function update(feedbackClass, cloudant, dbName, minrpi, maxrpi, activities) {
             if (result.signDiff > results.max_rpi) {
               results.max_rpi = result.signDiff;
             }
-          });
-
-          results.docs.sort((a, b) => {
-            return a.absDiff - b.absDiff;
           });
 
           resolve(results);
